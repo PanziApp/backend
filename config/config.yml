@@ -1,6 +1,6 @@
 app:
-  name: 'go-clean-template'
-  version: '1.0.0'
+  name: 'panzi-app'
+  version: '0.0.1'
 
 http:
   port: '8080'
@@ -10,7 +10,7 @@ logger:
   rollbar_env: 'go-clean-template'
 
 postgres:
-  pool_max: 2
+  pool_max: 10
 
 rabbitmq:
   rpc_server_exchange: 'rpc_server'

@@ -5,28 +5,37 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/evrone/go-clean-template/internal/entity"
-	"github.com/evrone/go-clean-template/internal/usecase"
-	"github.com/evrone/go-clean-template/pkg/logger"
+	"github.com/PanziApp/backend/internal/domain"
+	"github.com/PanziApp/backend/internal/usecase"
+	"github.com/PanziApp/backend/pkg/logger"
 )
 
-type translationRoutes struct {
+type userRoutes struct {
 	t usecase.Translation
 	l logger.Interface
 }
 
-func newTranslationRoutes(handler *gin.RouterGroup, t usecase.Translation, l logger.Interface) {
-	r := &translationRoutes{t, l}
+func newUserRoutes(handler *gin.RouterGroup, t usecase.Translation, l logger.Interface) {
+	r := &userRoutes{t, l}
 
-	h := handler.Group("/translation")
+	handler.POST("/sign-up")
+	handler.POST("/sign-in")
+	handler.POST("/reset-password/link")
+	handler.POST("/reset-password")
+
+	h := handler.Group("/users")
 	{
-		h.GET("/history", r.history)
-		h.POST("/do-translate", r.doTranslate)
+		h.POST("/sign-out")
+		h.GET("/profile")
+		h.POST("/profile")
+		h.POST("/password")
+		h.GET("/avatar")
+		h.POST("/avatar")
 	}
 }
 
 type historyResponse struct {
-	History []entity.Translation `json:"history"`
+	History []domain.Translation `json:"history"`
 }
 
 // @Summary     Show history
@@ -38,7 +47,7 @@ type historyResponse struct {
 // @Success     200 {object} historyResponse
 // @Failure     500 {object} response
 // @Router      /translation/history [get]
-func (r *translationRoutes) history(c *gin.Context) {
+func (r *userRoutes) history(c *gin.Context) {
 	translations, err := r.t.History(c.Request.Context())
 	if err != nil {
 		r.l.Error(err, "http - v1 - history")
@@ -63,11 +72,11 @@ type doTranslateRequest struct {
 // @Accept      json
 // @Produce     json
 // @Param       request body doTranslateRequest true "Set up translation"
-// @Success     200 {object} entity.Translation
+// @Success     200 {object} domain.Translation
 // @Failure     400 {object} response
 // @Failure     500 {object} response
 // @Router      /translation/do-translate [post]
-func (r *translationRoutes) doTranslate(c *gin.Context) {
+func (r *userRoutes) doTranslate(c *gin.Context) {
 	var request doTranslateRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		r.l.Error(err, "http - v1 - doTranslate")
@@ -78,7 +87,7 @@ func (r *translationRoutes) doTranslate(c *gin.Context) {
 
 	translation, err := r.t.Translate(
 		c.Request.Context(),
-		entity.Translation{
+		domain.Translation{
 			Source:      request.Source,
 			Destination: request.Destination,
 			Original:    request.Original,

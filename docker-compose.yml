@@ -3,22 +3,22 @@ services:
 
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgres:14.3-alpine
     volumes:
       - pg-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: 'user'
-      POSTGRES_PASSWORD: 'pass'
       POSTGRES_DB: 'postgres'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'A66QKHdtIiNPzzgeIRKxf3e1aoG5pAD5lTCeOOFJoY4i8Nieh6f89qdILlgt00pT'
     ports:
       - 5432:5432
 
-  rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:3.8.12-management
-    ports:
-      - 5672:5672
-      - 15672:15672
+#  rabbitmq:
+#    container_name: rabbitmq
+#    image: rabbitmq:3.8.12-management
+#    ports:
+#      - 5672:5672
+#      - 15672:15672
 
   app:
     build: .

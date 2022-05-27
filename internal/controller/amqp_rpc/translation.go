@@ -6,9 +6,9 @@ import (
 
 	"github.com/streadway/amqp"
 
-	"github.com/evrone/go-clean-template/internal/entity"
-	"github.com/evrone/go-clean-template/internal/usecase"
-	"github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc/server"
+	"github.com/PanziApp/backend/internal/domain"
+	"github.com/PanziApp/backend/internal/usecase"
+	"github.com/PanziApp/backend/pkg/rabbitmq/rmq_rpc/server"
 )
 
 type translationRoutes struct {
@@ -23,7 +23,7 @@ func newTranslationRoutes(routes map[string]server.CallHandler, t usecase.Transl
 }
 
 type historyResponse struct {
-	History []entity.Translation `json:"history"`
+	History []domain.Translation `json:"history"`
 }
 
 func (r *translationRoutes) getHistory() server.CallHandler {
